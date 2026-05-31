@@ -1,4 +1,6 @@
-'use client';
+﻿'use client';
+
+import ProductImageModal from './ProductImageModal';
 
 import Image from 'next/image';
 import { useCart } from '@/lib/cartStore';
@@ -12,42 +14,42 @@ const allProducts = [
     name: 'Aneroid Sphygmomanometer',
     price: 8500,
     category: 'Individual Items',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sphygmomanometer.JPG',
+    image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=600&q=80',
   },
   {
     id: 'stethoscope',
     name: 'Stethoscope',
     price: 3500,
     category: 'Individual Items',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Stethoscope%201.jpg',
+    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80',
   },
   {
     id: 'littmann-classic-ii',
     name: 'Littmann Classic II Stethoscope',
     price: 12000,
     category: 'Individual Items',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Stethoscope%201.jpg',
+    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80',
   },
   {
     id: 'littmann-classic-iii',
     name: 'Littmann Classic III Stethoscope',
     price: 18000,
     category: 'Individual Items',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Stethoscope%201.jpg',
+    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80',
   },
   {
     id: 'pulse-oximeter',
     name: 'Pulse Oximeter',
     price: 4000,
     category: 'Individual Items',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Pulox%20Pulse%20Oximeter.JPG',
+    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80',
   },
   {
     id: 'basic-set',
     name: 'Basic Nursing Set',
     price: 20000,
     category: 'Sets',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/CM-2000.jpg',
+    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
     description: 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.',
   },
   {
@@ -55,7 +57,7 @@ const allProducts = [
     name: 'Premium Nursing Set',
     price: 23000,
     category: 'Sets',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/CM-2000.jpg',
+    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
     description: 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.',
   },
   {
@@ -63,7 +65,7 @@ const allProducts = [
     name: 'Classic Nursing Set',
     price: 41000,
     category: 'Sets',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/CM-2000.jpg',
+    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
     description: "Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.",
   },
   {
@@ -71,7 +73,7 @@ const allProducts = [
     name: 'Advanced Nursing Set',
     price: 55000,
     category: 'Sets',
-    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/CM-2000.jpg',
+    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
     description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.',
   },
 ];
@@ -81,6 +83,7 @@ export default function ProductGrid() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('default');
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   const categories = ['All', ...new Set(allProducts.map((product) => product.category))];
 
@@ -134,16 +137,31 @@ export default function ProductGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-stretch">
         {filteredAndSortedProducts.map((product) => (
           <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl transition-all group h-full flex flex-col">
-            <div className="relative h-52 bg-slate-100 flex-shrink-0">
-              <Image src={product.image} alt={product.name} fill unoptimized className="object-cover group-hover:scale-105 transition" sizes="(max-width: 640px) 100vw, 50vw" />
-            </div>
+            <div 
+                  className="relative h-52 bg-slate-100 flex-shrink-0 cursor-pointer overflow-hidden" 
+                  onClick={() => setSelectedProduct(product)}
+                >
+                  <Image 
+                    src={product.image} 
+                    alt={product.name} 
+                    fill 
+                    unoptimized 
+                    className="object-cover group-hover:scale-105 transition" 
+                    sizes="(max-width: 640px) 100vw, 50vw" 
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 bg-white/90 text-slate-950 text-xs font-bold px-3 py-1 rounded-full transition">
+                      Click to view
+                    </span>
+                  </div>
+                </div>
             <div className="p-6 flex flex-col flex-1">
               <p className="text-sm font-bold text-blue-700">{product.category}</p>
               <h3 className="font-bold text-xl my-2 text-slate-950 min-h-[3.5rem] leading-tight">{product.name}</h3>
               <p className="text-sm text-slate-600 min-h-[4.5rem] leading-relaxed">
                 {product.description || 'Trusted diagnostic supply for first aid, training, and daily care use.'}
               </p>
-              <p className="text-2xl font-bold mt-4 text-slate-950">₦{product.price.toLocaleString()}</p>
+              <p className="text-2xl font-bold mt-4 text-slate-950">â‚¦{product.price.toLocaleString()}</p>
               <button
                 onClick={() => {
                   addToCart(product);
@@ -158,6 +176,18 @@ export default function ProductGrid() {
           </div>
         ))}
       </div>
+
+      <ProductImageModal
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        image={selectedProduct?.image || ''}
+        name={selectedProduct?.name || ''}
+        price={selectedProduct?.price || 0}
+        description={selectedProduct?.description}
+      />
     </div>
   );
 }
+
+
+

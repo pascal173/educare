@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useCart } from '@/lib/cartStore';
@@ -195,7 +195,14 @@ export default function Checkout() {
 
     try {
       paystack.newTransaction({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_live_bdd630e7227e9bb9a2fd4a2a3e7c9e9d66556537',
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+            onLoad: () => {
+              if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+                toast.error("Payment configuration error. Please contact support.");
+                setIsLoading(false);
+                return;
+              }
+            },,
         email: deliveryInfo.email,
         amount: Math.round(total * 100),
         currency: 'NGN',
@@ -399,3 +406,4 @@ export default function Checkout() {
     </div>
   );
 }
+
