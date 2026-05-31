@@ -14,42 +14,43 @@ const allProducts = [
     name: 'Aneroid Sphygmomanometer',
     price: 8500,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
   },
   {
     id: 'stethoscope',
     name: 'Stethoscope',
     price: 3500,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
   },
   {
     id: 'littmann-classic-ii',
     name: 'Littmann Classic II Stethoscope',
     price: 12000,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
   },
   {
     id: 'littmann-classic-iii',
     name: 'Littmann Classic III Stethoscope',
     price: 18000,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
   },
   {
     id: 'pulse-oximeter',
     name: 'Pulse Oximeter',
     price: 4000,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80',
   },
   {
     id: 'basic-set',
     name: 'Basic Nursing Set',
     price: 20000,
     category: 'Sets',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
+    description: 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.',
     description: 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.',
   },
   {
@@ -57,7 +58,8 @@ const allProducts = [
     name: 'Premium Nursing Set',
     price: 23000,
     category: 'Sets',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=800&q=80',
+    description: 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.',
     description: 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.',
   },
   {
@@ -65,7 +67,8 @@ const allProducts = [
     name: 'Classic Nursing Set',
     price: 41000,
     category: 'Sets',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.',
     description: "Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.",
   },
   {
@@ -73,7 +76,8 @@ const allProducts = [
     name: 'Advanced Nursing Set',
     price: 55000,
     category: 'Sets',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&q=80',
+    image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
+    description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.',
     description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.',
   },
 ];
@@ -161,7 +165,7 @@ export default function ProductGrid() {
               <p className="text-sm text-slate-600 min-h-[4.5rem] leading-relaxed">
                 {product.description || 'Trusted diagnostic supply for first aid, training, and daily care use.'}
               </p>
-              <p className="text-2xl font-bold mt-4 text-slate-950">â‚¦{product.price.toLocaleString()}</p>
+              <p className="text-2xl font-bold mt-4 text-slate-950">{"\u20A6"}{product.price.toLocaleString()}</p>
               <button
                 onClick={() => {
                   addToCart(product);
@@ -188,6 +192,8 @@ export default function ProductGrid() {
     </div>
   );
 }
+
+
 
 
 
