@@ -1,97 +1,72 @@
-﻿# Vercel Deployment Guide (Free Tier)
+﻿# Vercel + Neon Deployment Guide
 
-This project is ready to be deployed on Vercel (free Hobby plan).
+This project is configured for **Vercel (free)** + **Neon (free Postgres)**.
 
-## Important: Project Structure
+## 1. Deploy to Vercel
 
-The actual Next.js app lives inside the pharmaequip/ folder.
+1. Push your code to GitHub (already done).
+2. Go to [vercel.com](https://vercel.com) → Add New Project.
+3. Import your repo.
+4. **Critical**: Set **Root Directory** to `pharmaequip`.
+5. Deploy.
 
-When connecting this project to Vercel, you **must** set the **Root Directory** to:
+## 2. Set Up Neon Database (Free)
 
-`
-pharmaequip
-`
+1. Go to https://neon.tech and log in (you already have an account).
+2. Create a new project (free tier is fine).
+3. In your Neon project, copy the **Connection string**.
+4. Add it in two places:
+   - Locally: `.env.local` (or `.env`)
+   - On Vercel: Project → Settings → Environment Variables → `DATABASE_URL`
 
-If you don't do this, the build will fail.
+Example connection string from Neon:
+`postgresql://neondb_owner:xxxx@ep-xxx.region.aws.neon.tech/neondb?sslmode=require&channel_binding=require`
 
----
+## 3. Apply Database Schema
 
-## Step-by-Step Deployment Instructions
+After adding the `DATABASE_URL`:
 
-### 1. Push your code to GitHub (Recommended)
+```bash
+npx prisma generate
+npx prisma db push
+```
 
-- Create a new repository on GitHub.
-- Push the entire educare folder (or at least the pharmaequip folder + root files).
+This will create the tables (Order, QuoteRequest, etc.) in Neon.
 
-### 2. Import Project on Vercel
+## 4. Add Environment Variables on Vercel
 
-1. Go to [vercel.com](https://vercel.com) and log in (use GitHub).
-2. Click **"Add New Project"**.
-3. Import your GitHub repository.
-4. **Critical Step**: In the project settings, set:
-   - **Root Directory**: pharmaequip
-   - Framework Preset: Next.js (should auto-detect)
-5. Click **Deploy**.
+In Vercel, add these:
 
-### 3. Add Environment Variables (Later)
+- `DATABASE_URL` → Your full Neon connection string
+- `NEXT_PUBLIC_ADMIN_USERNAME` → educare-owner (or change it)
+- `NEXT_PUBLIC_ADMIN_PASSWORD` → Your chosen password
 
-You will need to add these in Vercel → Project → Settings → Environment Variables:
+Redeploy after adding the variables.
 
-- DATABASE_URL → Your Supabase (or Neon) connection string with pooler settings.
-- NEXT_PUBLIC_ADMIN_USERNAME
-- NEXT_PUBLIC_ADMIN_PASSWORD
-- NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY (optional for now)
-
-After adding variables, redeploy.
-
-### 4. Connect Your Custom Domain (Hostinger)
+## 5. Connect Custom Domain (Hostinger)
 
 After the site is live on Vercel:
+- Go to Vercel → Domains
+- Add your domain
+- Update the DNS records in Hostinger (A records + CNAME)
 
-1. In Vercel → Project → Settings → Domains
-2. Add your domain.
-3. Vercel will give you A records and a CNAME.
-4. Go to your Hostinger domain DNS settings and update the records (do **not** cancel the domain).
+## Files Already Prepared
 
----
+- `vercel.json` included
+- Clean `prisma.config.ts`
+- `.env.example` with Neon instructions
+- Proper icon and metadata setup
 
-## Files Already Configured for Vercel
+## Current Limitations (Free Tier)
 
-- package.json has correct build script + postinstall for Prisma.
-- 
-ext.config.ts has security headers.
-- ercel.json (see below) is included for production optimizations.
+- Vercel: 100 GB bandwidth + 100 GB-hours functions per month
+- Neon: 0.5 GB storage + limited compute on free plan
 
----
+This is sufficient for a new/low-traffic site.
 
-## Current Limitations on Free Tier
+## Next Steps After Database is Connected
 
-- 100 GB bandwidth/month
-- 100 GB-hours of function execution
-- No free database (you still need Supabase or Neon free tier)
+- Test the Admin page: `/a9kl4mq7zr2xp8vn`
+- Test quote requests and checkout
 
-For a new/low-traffic site this is usually sufficient.
-
----
-
-## After Deployment
-
-Test these pages:
-- Homepage
-- /a9kl4mq7zr2xp8vn (Admin)
-- /request-quote
-- /checkout
-
-Once the database is connected, the admin will start showing real data.
-
----
-
-## Need Help?
-
-When you return, continue from here. The main remaining tasks are:
-
-1. Deploy to Vercel (set Root Directory = pharmaequip)
-2. Connect Supabase/Neon database
-3. Point your Hostinger domain to Vercel
-
-Good luck!
+Once the database is linked, the admin and order system will work properly.
