@@ -193,16 +193,15 @@ export default function Checkout() {
     const paystack = new PaystackPop();
     const reference = `EDUCARE-${Date.now()}`;
 
+    if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+      toast.error("Payment is not configured. Please contact support.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       paystack.newTransaction({
         key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-            onLoad: () => {
-              if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
-                toast.error("Payment configuration error. Please contact support.");
-                setIsLoading(false);
-                return;
-              }
-            },,
         email: deliveryInfo.email,
         amount: Math.round(total * 100),
         currency: 'NGN',
@@ -406,4 +405,7 @@ export default function Checkout() {
     </div>
   );
 }
+
+
+
 
