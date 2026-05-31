@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+﻿import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -9,7 +9,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: 'EduCare Medical Supplies',
   description: 'First aid kits, nursing training kits, and medical supplies in Asaba, Delta State.',
-  icons: { icon: '/logo.png' },
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+    shortcut: '/logo.png',
+  },
 };
 
 export default function RootLayout({
@@ -26,3 +30,4 @@ export default function RootLayout({
     </html>
   );
 }
+
