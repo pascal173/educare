@@ -15,6 +15,7 @@ const allProducts = [
     price: 8500,
     category: 'Individual Items',
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    description: 'Manual blood pressure monitor with aneroid gauge. Reliable, battery-free readings for clinical and home use.',
   },
   {
     id: 'stethoscope',
@@ -22,6 +23,7 @@ const allProducts = [
     price: 3500,
     category: 'Individual Items',
     image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
+    description: 'Classic dual-head stethoscope for clear heart, lung, and bowel sound auscultation.',
   },
   {
     id: 'littmann-classic-ii',
@@ -29,6 +31,7 @@ const allProducts = [
     price: 12000,
     category: 'Individual Items',
     image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
+    description: 'Professional-grade stethoscope with excellent acoustic sensitivity. Trusted by healthcare workers worldwide.',
   },
   {
     id: 'littmann-classic-iii',
@@ -36,6 +39,7 @@ const allProducts = [
     price: 18000,
     category: 'Individual Items',
     image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
+    description: 'Advanced tubing and tunable diaphragm for superior sound quality in adult and pediatric assessments.',
   },
   {
     id: 'pulse-oximeter',
@@ -43,6 +47,7 @@ const allProducts = [
     price: 4000,
     category: 'Individual Items',
     image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80',
+    description: 'Portable finger pulse oximeter for quick and accurate SpO2 and pulse rate monitoring.',
   },
   {
     id: 'basic-set',
@@ -50,7 +55,6 @@ const allProducts = [
     price: 20000,
     category: 'Sets',
     image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
-    description: 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.',
     description: 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.',
   },
   {
@@ -60,7 +64,6 @@ const allProducts = [
     category: 'Sets',
     image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=800&q=80',
     description: 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.',
-    description: 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.',
   },
   {
     id: 'classic-set',
@@ -69,7 +72,6 @@ const allProducts = [
     category: 'Sets',
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
     description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.',
-    description: "Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.",
   },
   {
     id: 'advanced-set',
@@ -77,7 +79,6 @@ const allProducts = [
     price: 55000,
     category: 'Sets',
     image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
-    description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.',
     description: 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.',
   },
 ];
