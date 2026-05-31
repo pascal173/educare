@@ -7,6 +7,14 @@ import { useCart } from '@/lib/cartStore';
 import { Search } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useMemo, useState } from 'react';
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  image: string;
+  description?: string;
+}
 
 const allProducts = [
   {
@@ -88,7 +96,7 @@ export default function ProductGrid() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortOption, setSortOption] = useState('default');
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const categories = ['All', ...new Set(allProducts.map((product) => product.category))];
 
@@ -185,14 +193,15 @@ export default function ProductGrid() {
       <ProductImageModal
         isOpen={!!selectedProduct}
         onClose={() => setSelectedProduct(null)}
-        image={selectedProduct?.image || ''}
-        name={selectedProduct?.name || ''}
-        price={selectedProduct?.price || 0}
+        image={selectedProduct?.image ?? ''}
+        name={selectedProduct?.name ?? ''}
+        price={selectedProduct?.price ?? 0}
         description={selectedProduct?.description}
       />
     </div>
   );
 }
+
 
 
 
