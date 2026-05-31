@@ -14,7 +14,7 @@ const allProducts = [
     name: 'Aneroid Sphygmomanometer',
     price: 8500,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sphygmomanometer.JPG',
     description: 'Manual blood pressure monitor with aneroid gauge. Reliable, battery-free readings for clinical and home use.',
   },
   {
@@ -22,7 +22,7 @@ const allProducts = [
     name: 'Stethoscope',
     price: 3500,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Stethoscope%201.jpg',
     description: 'Classic dual-head stethoscope for clear heart, lung, and bowel sound auscultation.',
   },
   {
@@ -30,7 +30,7 @@ const allProducts = [
     name: 'Littmann Classic II Stethoscope',
     price: 12000,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Stethoscope%201.jpg',
     description: 'Professional-grade stethoscope with excellent acoustic sensitivity. Trusted by healthcare workers worldwide.',
   },
   {
@@ -38,7 +38,7 @@ const allProducts = [
     name: 'Littmann Classic III Stethoscope',
     price: 18000,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Stethoscope%201.jpg',
     description: 'Advanced tubing and tunable diaphragm for superior sound quality in adult and pediatric assessments.',
   },
   {
@@ -46,7 +46,7 @@ const allProducts = [
     name: 'Pulse Oximeter',
     price: 4000,
     category: 'Individual Items',
-    image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Pulox%20Pulse%20Oximeter.JPG',
     description: 'Portable finger pulse oximeter for quick and accurate SpO2 and pulse rate monitoring.',
   },
   {
