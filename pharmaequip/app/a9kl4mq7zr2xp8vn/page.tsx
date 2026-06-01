@@ -1,11 +1,10 @@
-'use client';
+﻿'use client';
 import { useEffect, useMemo, useState } from 'react';
 import type { Order } from '@/lib/ordersStore';
 import { LogOut, Eye, X, Reply, Mail, Phone, RefreshCw } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 type AdminTab = 'all' | 'orders' | 'quotes';
-const ADMIN_USERNAME = 'educare-owner';
-const ADMIN_PASSWORD = 'Edc-7Qm2-Client-91';
 const ADMIN_SESSION_KEY = 'educare-admin-session';
 
 const isQuoteRequest = (item: Order) => item.status === 'Quote Request';
@@ -64,7 +63,7 @@ export default function AdminDashboard() {
       const data = (await response.json()) as Order[];
       setOrders(data);
     } catch {
-      alert('Could not load orders and quotes. Please try again.');
+      toast.error('Could not load orders and quotes. Please try again.');
     } finally {
       setIsRefreshing(false);
     }
@@ -84,21 +83,33 @@ export default function AdminDashboard() {
     };
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (failedAttempts >= 5) {
-      alert('Too many login attempts. Refresh the page before trying again.');
+      toast.error('Too many login attempts. Refresh the page before trying again.');
       return;
     }
 
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      setIsLoggedIn(true);
-      setFailedAttempts(0);
-      sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
-    } else {
-      setFailedAttempts((attempts) => attempts + 1);
-      alert('Wrong credentials.');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res.ok) {
+        setIsLoggedIn(true);
+        setFailedAttempts(0);
+        sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+        loadDataAndStartPolling();
+        toast.success('Login successful. Loading live data...');
+      } else {
+        setFailedAttempts((attempts) => attempts + 1);
+        toast.error('Wrong credentials.');
+      }
+    } catch {
+      alert('Login failed. Please try again.');
     }
   };
 
@@ -133,7 +144,7 @@ export default function AdminDashboard() {
     });
 
     if (!response.ok) {
-      alert('Could not update the order status.');
+      toast.error('Could not update the order status.');
       return;
     }
 
@@ -406,3 +417,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

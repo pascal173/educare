@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';\nimport { isAdminAuthenticated } from '@/lib/adminAuth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET() {\n  if (!isAdminAuthenticated()) {\n    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });\n  }\n
   const [orders, quotes] = await Promise.all([
     prisma.order.findMany({
       include: { items: true },
@@ -65,3 +65,4 @@ export async function GET() {
     )
   );
 }
+

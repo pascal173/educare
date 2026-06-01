@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';\nimport { isAdminAuthenticated } from '@/lib/adminAuth';
 import { prisma } from '@/lib/prisma';
 
 type OrderPayload = {
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
   return NextResponse.json({ ok: true, orderId: order.id });
 }
 
-export async function PATCH(request: Request) {
+export async function PATCH(request: Request) {\n  if (!isAdminAuthenticated()) {\n    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });\n  }\n
   const body = (await request.json()) as { id?: string; status?: string };
 
   if (!body.id || !body.status) {
@@ -111,3 +111,4 @@ export async function PATCH(request: Request) {
 
   return NextResponse.json({ ok: true, orderId: order.id });
 }
+
