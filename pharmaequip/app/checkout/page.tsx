@@ -7,7 +7,6 @@ import type { Order, OrderStatus } from '@/lib/ordersStore';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, MessageCircle, Smile } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import emailjs from '@emailjs/browser';
 
 type PaystackConstructor = new () => {
   newTransaction: (options: {
@@ -70,23 +69,27 @@ export default function Checkout() {
 
   const sendConfirmationEmail = async (order: Order) => {
     if (!deliveryInfo.email) return;
-    const params = {
+
+    // Send via server-side Resend (non-blocking)
+    const payload = {
       to_email: deliveryInfo.email,
       customer_name: deliveryInfo.fullName || 'Valued Customer',
       order_id: order.id,
       date: order.date,
       total: `NGN ${total.toLocaleString()}`,
-      total_amount: `NGN ${total.toLocaleString()}`,
-      address: deliveryType === 'door' ? `${deliveryInfo.address}, ${deliveryInfo.city}, ${deliveryInfo.state}` : 'WhatsApp order',
-      delivery_address: deliveryType === 'door' ? `${deliveryInfo.address}, ${deliveryInfo.city}, ${deliveryInfo.state}` : 'WhatsApp order',
+      address: deliveryType === 'door' 
+        ? `${deliveryInfo.address}, ${deliveryInfo.city}, ${deliveryInfo.state}` 
+        : 'WhatsApp order',
       items_list: cart.map((item: CartItem) => `${item.name} x${item.quantity}`).join('\n'),
     };
 
-    try {
-      await emailjs.send('service_41pn9v4', 'template_slj46bq', params, 'Spu0RTPNhcm1JUPIN');
-    } catch (err) {
-      console.error(err);
-    }
+    fetch('/api/send-order-confirmation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch((err) => {
+      console.error('Order confirmation email failed (non-blocking):', err);
+    });
   };
 
   const createOrder = (orderStatus: OrderStatus, reference?: string): Order => ({
