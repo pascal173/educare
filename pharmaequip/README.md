@@ -29,8 +29,18 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy on Vercel (Free Tier)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Very Important**: When importing this project to Vercel, set **Root Directory** to `pharmaequip`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Full step-by-step guide (including how to connect your Hostinger domain later):
+
+→ See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md)
+
+Quick summary:
+- Root Directory = `pharmaequip`
+- Add your DATABASE_URL in Vercel Environment Variables
+- Use Supabase or Neon (free tier)
+
+This project is already configured with `vercel.json` and proper build settings.
+

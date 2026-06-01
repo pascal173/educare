@@ -1,12 +1,10 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import type { Order } from '@/lib/ordersStore';
 import { LogOut, Eye, X, Reply, Mail, Phone, RefreshCw } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 type AdminTab = 'all' | 'orders' | 'quotes';
-const ADMIN_USERNAME = 'educare-owner';
-const ADMIN_PASSWORD = 'Edc-7Qm2-Client-91';
-const ADMIN_SESSION_KEY = 'educare-admin-session';
 
 const isQuoteRequest = (item: Order) => item.status === 'Quote Request';
 const formatMoney = (amount: number) => `NGN ${amount.toLocaleString()}`;
@@ -39,7 +37,10 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTab>('all');
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [dataError, setDataError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const quoteRequests = useMemo(
     () => orders.filter((item) => isQuoteRequest(item)),
@@ -56,55 +57,149 @@ export default function AdminDashboard() {
       ? customerOrders
       : quoteRequests;
 
-  const refreshRequests = async () => {
-    setIsRefreshing(true);
+  const clearPolling = () => {
+    if (pollIntervalRef.current) {
+      clearInterval(pollIntervalRef.current);
+      pollIntervalRef.current = null;
+    }
+  };
+
+  const startPolling = () => {
+    clearPolling();
+    pollIntervalRef.current = setInterval(() => {
+      refreshRequests(true);
+    }, 15000); // Reduced from 5s to 15s to be kinder to the DB
+  };
+
+  const manualRefresh = async () => {
+    await refreshRequests();
+    toast.success('Data refreshed from database');
+  };
+
+  const refreshRequests = async (isPoll = false) => {
+    if (!isPoll) {
+      setIsRefreshing(true);
+      setDataError(null);
+    }
+
     try {
       const response = await fetch('/api/admin-requests', { cache: 'no-store' });
-      if (!response.ok) throw new Error('Unable to load requests');
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => '');
+        // Distinguish auth errors (expected before login) from real DB problems
+        if (response.status === 401 || response.status === 403) {
+          throw new Error('UNAUTHORIZED');
+        }
+        throw new Error(errorText || `Server error ${response.status}`);
+      }
       const data = (await response.json()) as Order[];
       setOrders(data);
-    } catch {
-      alert('Could not load orders and quotes. Please try again.');
+      setDataError(null);
+    } catch (err: any) {
+      const message = err?.message || 'Could not reach the database.';
+
+      if (message === 'UNAUTHORIZED') {
+        // Before login or session expired - do not treat as DB error or show scary toast
+        setDataError(null);
+      } else {
+        setDataError(message);
+
+        if (!isPoll) {
+          // Only show toast on manual/user-triggered refreshes, not background polls
+          toast.error(`Database error: ${message}. Check your DATABASE_URL / connection.`, {
+            duration: 6000,
+          });
+        }
+      }
     } finally {
-      setIsRefreshing(false);
+      if (!isPoll) {
+        setIsRefreshing(false);
+        setIsLoadingData(false);
+      }
     }
+  };
+
+  // Load data + start polling ONLY after successful login (or restored session)
+  const loadDataAndStartPolling = async () => {
+    setIsLoadingData(true);
+    await refreshRequests();
+    startPolling();
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true') {
-      setIsLoggedIn(true);
-    }
+    // Check for valid server-side session cookie on mount (replaces old sessionStorage)
+    const checkExistingSession = async () => {
+      try {
+        const res = await fetch('/api/admin/session', { cache: 'no-store' });
+        if (res.ok) {
+          setIsLoggedIn(true);
+          loadDataAndStartPolling();
+        } else {
+          // Not logged in - show the login form. Still do one lightweight fetch for UI counts if desired.
+          setIsLoadingData(true);
+          await refreshRequests().catch(() => {});
+          setIsLoadingData(false);
+        }
+      } catch {
+        // Network issue etc - show login screen
+        setIsLoadingData(true);
+        await refreshRequests().catch(() => {});
+        setIsLoadingData(false);
+      }
+    };
 
-    refreshRequests();
-    refreshRequests();
-    const interval = window.setInterval(refreshRequests, 5000);
+    checkExistingSession();
 
     return () => {
-      window.clearInterval(interval);
+      clearPolling();
     };
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (failedAttempts >= 5) {
-      alert('Too many login attempts. Refresh the page before trying again.');
+      toast.error('Too many login attempts. Refresh the page before trying again.');
       return;
     }
 
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      setIsLoggedIn(true);
-      setFailedAttempts(0);
-      sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
-    } else {
-      setFailedAttempts((attempts) => attempts + 1);
-      alert('Wrong credentials.');
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res.ok) {
+        setIsLoggedIn(true);
+        setFailedAttempts(0);
+        setUsername('');
+        setPassword('');
+        loadDataAndStartPolling();
+        toast.success('Login successful. Loading live data...');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setFailedAttempts((attempts) => attempts + 1);
+        toast.error(data?.error || 'Wrong credentials.');
+      }
+    } catch (err) {
+      toast.error('Login request failed. Check your connection.');
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } catch {
+      // Ignore network errors on logout; cookie will expire anyway
+    }
     setIsLoggedIn(false);
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    setOrders([]);
+    setDataError(null);
+    clearPolling();
+    setUsername('');
+    setPassword('');
+    toast.success('Logged out');
   };
 
   const replyToQuote = (quote: Order) => {
@@ -133,7 +228,7 @@ export default function AdminDashboard() {
     });
 
     if (!response.ok) {
-      alert('Could not update the order status.');
+      toast.error('Could not update the order status.');
       return;
     }
 
@@ -177,8 +272,8 @@ export default function AdminDashboard() {
             <p className="text-base font-medium text-slate-700 mt-2">Clear view of customer requests, items to deliver, payment status, and contact details.</p>
           </div>
           <div className="flex gap-3">
-            <button onClick={refreshRequests} className="flex items-center gap-2 px-5 py-3 bg-white border border-slate-300 rounded-2xl text-slate-950 font-bold shadow-sm hover:bg-slate-50" disabled={isRefreshing}>
-              <RefreshCw size={18} /> {isRefreshing ? 'Refreshing' : 'Refresh'}
+            <button onClick={manualRefresh} className="flex items-center gap-2 px-5 py-3 bg-white border border-slate-300 rounded-2xl text-slate-950 font-bold shadow-sm hover:bg-slate-50" disabled={isRefreshing || isLoadingData}>
+              <RefreshCw size={18} className={isRefreshing ? 'animate-spin' : ''} /> {isRefreshing ? 'Refreshing' : 'Refresh'}
             </button>
             <button onClick={logout} className="flex items-center gap-2 px-5 py-3 bg-white border border-red-200 rounded-2xl text-red-700 font-bold shadow-sm hover:bg-red-50">
               <LogOut size={20} /> Logout
@@ -207,6 +302,25 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {/* Database status banner */}
+        {dataError && (
+          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800">
+            <p className="font-bold">Database connection problem</p>
+            <p className="text-sm mt-1">
+              {dataError} — The admin cannot load data from Supabase.
+              Make sure <code className="bg-red-100 px-1 rounded">DATABASE_URL</code> is set correctly (and the database server is reachable).
+            </p>
+            <p className="text-xs mt-2 text-red-600">See pharmaequip/.env.example for connection string format.</p>
+          </div>
+        )}
+
+        {isLoadingData && !dataError && (
+          <div className="mb-6 rounded-2xl border border-blue-200 bg-blue-50 p-8 text-center text-blue-700">
+            <RefreshCw className="mx-auto mb-3 animate-spin" size={28} />
+            <p className="font-semibold">Loading live data from Supabase...</p>
+          </div>
+        )}
+
         <div className="hidden md:block bg-white rounded-3xl shadow overflow-hidden border border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -223,7 +337,11 @@ export default function AdminDashboard() {
               </thead>
               <tbody className="divide-y">
                 {displayedItems.length === 0 ? (
-                  <tr><td colSpan={7} className="p-12 text-center text-slate-600 text-lg font-semibold">No requests yet.</td></tr>
+                  <tr>
+                    <td colSpan={7} className="p-12 text-center text-slate-600 text-lg font-semibold">
+                      {isLoadingData ? 'Loading...' : dataError ? 'Unable to load data from database.' : 'No requests yet.'}
+                    </td>
+                  </tr>
                 ) : (
                   displayedItems.map((item, index) => (
                     <tr key={`${item.id}-${index}`} className="hover:bg-blue-50">
@@ -254,7 +372,9 @@ export default function AdminDashboard() {
 
         <div className="md:hidden space-y-4">
           {displayedItems.length === 0 ? (
-            <div className="bg-white rounded-3xl p-10 text-center text-slate-600 text-lg font-bold shadow border border-slate-200">No requests yet.</div>
+            <div className="bg-white rounded-3xl p-10 text-center text-slate-600 text-lg font-bold shadow border border-slate-200">
+              {isLoadingData ? 'Loading live data from Supabase...' : dataError ? 'Database error — see banner above.' : 'No requests yet.'}
+            </div>
           ) : (
             displayedItems.map((item, index) => (
               <div key={`${item.id}-${index}`} className="bg-white rounded-3xl shadow p-5 border border-slate-200">

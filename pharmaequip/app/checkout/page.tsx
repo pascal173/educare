@@ -190,12 +190,16 @@ export default function Checkout() {
       return;
     }
 
+    if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+      console.warn('NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY is not set. Payment may not work in production.');
+    }
+
     const paystack = new PaystackPop();
     const reference = `EDUCARE-${Date.now()}`;
 
     try {
       paystack.newTransaction({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || 'pk_live_bdd630e7227e9bb9a2fd4a2a3e7c9e9d66556537',
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
         email: deliveryInfo.email,
         amount: Math.round(total * 100),
         currency: 'NGN',
