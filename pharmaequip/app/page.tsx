@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -95,7 +95,7 @@ export default function Home() {
           </div>
           <div className="bg-white border border-slate-200 rounded-2xl p-6">
             <p className="text-sm font-bold text-blue-700">Email</p>
-            <p className="text-xl font-bold mt-1 break-all">educaresupplies@gmail.com</p>
+            <p className="text-xl font-bold mt-1 break-all">educaresupplies21@gmail.com</p>
           </div>
         </div>
       </section>
@@ -115,10 +115,10 @@ export default function Home() {
           <h3 className="text-4xl font-bold text-center mb-12">Available Sets</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              ['Basic Set', '₦20,000', 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.'],
-              ['Premium Set', '₦23,000', 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.'],
-              ['Classic Set', '₦41,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.'],
-              ['Advanced Set', '₦55,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.'],
+              ['Basic Set', '\u20A620,000', 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.'],
+              ['Premium Set', '\u20A623,000', 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.'],
+              ['Classic Set', '\u20A641,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.'],
+              ['Advanced Set', '\u20A655,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.'],
             ].map(([name, price, items]) => (
               <div key={name} className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm">
                 <p className="text-2xl font-bold text-blue-900">{name}</p>
@@ -150,7 +150,7 @@ export default function Home() {
           </div>
           <div className="space-y-4 md:text-right">
             <p className="flex md:justify-end items-center gap-3 text-lg"><Phone size={20} /> 07067526793 | 09049293418</p>
-            <p className="text-lg">educaresupplies@gmail.com</p>
+            <p className="text-lg">educaresupplies21@gmail.com</p>
             <p className="flex md:justify-end items-center gap-3 text-lg"><MapPin size={20} /> Asaba, Delta State</p>
           </div>
         </div>
@@ -160,3 +160,5 @@ export default function Home() {
     </div>
   );
 }
+
+

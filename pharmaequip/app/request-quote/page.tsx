@@ -1,10 +1,9 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Send, Smile } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import emailjs from '@emailjs/browser';
 
 export default function RequestQuote() {
   const router = useRouter();
@@ -74,20 +73,19 @@ export default function RequestQuote() {
     setIsSubmitting(false);
     setIsSuccess(true);
 
-    emailjs.send(
-        "service_41pn9v4",
-        "template_slj46bq",
-        {
-          to_email: formData.email,
-          customer_name: formData.fullName,
-          order_id: quoteRequest.id,
-          date: quoteRequest.date,
-          total: "Quote Request",
-          address: "We will contact you soon",
-        },
-        "Spu0RTPNhcm1JUPIN"
-      )
-      .catch(() => console.log("Email not sent"));
+    // Send confirmation email via Resend
+    fetch('/api/send-quote-confirmation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to_email: formData.email,
+        customer_name: formData.fullName,
+        order_id: quoteRequest.id,
+        date: quoteRequest.date,
+        interested_items: formData.interestedItems,
+        message: formData.message,
+      }),
+    }).catch(() => console.log("Email sending failed"));
 
     setTimeout(() => {
       router.push('/');
@@ -147,3 +145,4 @@ export default function RequestQuote() {
     </div>
   );
 }
+
