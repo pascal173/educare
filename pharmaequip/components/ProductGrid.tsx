@@ -174,7 +174,7 @@ export default function ProductGrid() {
               <p className="text-sm text-slate-600 min-h-[4.5rem] leading-relaxed">
                 {product.description || 'Trusted diagnostic supply for first aid, training, and daily care use.'}
               </p>
-              <p className="text-2xl font-bold mt-4 text-slate-950 /* Naira fix v2 */">{"\u20A6"}{product.price.toLocaleString()}</p>
+              <p className="text-2xl font-bold mt-4 text-slate-950 /* NairaCacheBust-20260601214047 */ /* Naira fix v2 */">{"\u20A6"}{product.price.toLocaleString()}</p>
               <button
                 onClick={() => {
                   addToCart(product);
@@ -201,6 +201,7 @@ export default function ProductGrid() {
     </div>
   );
 }
+
 
 
 

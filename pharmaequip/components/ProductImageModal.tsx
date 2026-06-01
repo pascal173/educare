@@ -41,7 +41,7 @@ export default function ProductImageModal({ isOpen, onClose, image, name, price,
         <div className="p-8">
           <p className="text-blue-700 font-bold text-sm mb-1">PRODUCT DETAILS</p>
           <h2 className="text-3xl font-bold text-slate-950 mb-2">{name}</h2>
-          <p className="text-3xl font-bold text-slate-950 mb-4 /* Naira fix v2 */">{"\u20A6"}{price.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-slate-950 mb-4 /* NairaCacheBust-20260601214047 */ /* Naira fix v2 */">{"\u20A6"}{price.toLocaleString()}</p>
           
           {description && (
             <p className="text-slate-600 text-lg leading-relaxed">{description}</p>
@@ -55,5 +55,6 @@ export default function ProductImageModal({ isOpen, onClose, image, name, price,
     </div>
   );
 }
+
 
 
