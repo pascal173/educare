@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifySessionCookie } from '@/lib/adminAuth';
 
-function handlePrismaError(error: any) {
+function handlePrismaError(error: unknown) {
   console.error('[ORDERS API] Prisma error:', error);
   return NextResponse.json(
     { error: 'Database operation failed. Ensure Supabase DATABASE_URL is configured correctly.' },

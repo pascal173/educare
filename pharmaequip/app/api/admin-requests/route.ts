@@ -71,7 +71,7 @@ export async function GET(request: Request) {
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[ADMIN-REQUESTS] Database error:', error);
     return NextResponse.json(
       { error: 'Database connection failed. Check DATABASE_URL / Supabase configuration.' },

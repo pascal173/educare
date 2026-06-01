@@ -95,8 +95,8 @@ export default function AdminDashboard() {
       const data = (await response.json()) as Order[];
       setOrders(data);
       setDataError(null);
-    } catch (err: any) {
-      const message = err?.message || 'Could not reach the database.';
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Could not reach the database.';
 
       if (message === 'UNAUTHORIZED') {
         // Before login or session expired - do not treat as DB error or show scary toast
@@ -153,6 +153,7 @@ export default function AdminDashboard() {
     return () => {
       clearPolling();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -182,7 +183,7 @@ export default function AdminDashboard() {
         setFailedAttempts((attempts) => attempts + 1);
         toast.error(data?.error || 'Wrong credentials.');
       }
-    } catch (err) {
+    } catch {
       toast.error('Login request failed. Check your connection.');
     }
   };

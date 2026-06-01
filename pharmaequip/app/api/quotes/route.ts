@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-function handlePrismaError(error: any) {
+function handlePrismaError(error: unknown) {
   console.error('[QUOTES API] Prisma error:', error);
   return NextResponse.json(
     { error: 'Database operation failed. Check your Supabase DATABASE_URL configuration.' },

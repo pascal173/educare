@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       const reference = event.data.reference;
 
       // Update order status in database
-      const updatedOrder = await prisma.order.updateMany({
+      await prisma.order.updateMany({
         where: { reference },
         data: { status: 'Paid' },
       });

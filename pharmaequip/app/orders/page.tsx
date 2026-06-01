@@ -19,8 +19,9 @@ export default function Orders() {
       if (!res.ok) throw new Error('Failed to load your orders');
       const data = await res.json();
       setOrders(data);
-    } catch (e: any) {
-      setError(e?.message || 'Could not load orders from the database.');
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Could not load orders from the database.';
+      setError(message);
       toast.error('Could not load your orders. Please try again later.');
     } finally {
       setIsLoading(false);
