@@ -26,27 +26,30 @@ export async function POST(request: NextRequest) {
       replyTo: 'educaresupplies21@gmail.com',
       subject: `Quote Request Received - Educare NG #${order_id}`,
       html: `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 620px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
           
           <!-- Header with Logo -->
-          <div style="background-color: #1e40af; padding: 24px 20px; text-align: center;">
-            <img src="https://educaremed.com/logo.png" alt="Educare Medical Supplies" style="max-height: 55px; width: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;" />
-            <div style="color: #ffffff; font-size: 18px; font-weight: 600; letter-spacing: 0.5px;">Educare Medical Supplies</div>
+          <div style="background-color: #1e40af; padding: 28px 24px; text-align: center;">
+            <img src="https://educaremed.com/logo.png" alt="Educare Medical Supplies" width="170" style="max-width: 170px; height: auto; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;" />
+            <div style="color: #ffffff; font-size: 19px; font-weight: 600; letter-spacing: 0.4px;">Educare Medical Supplies</div>
           </div>
 
           <!-- Main Content -->
-          <div style="padding: 28px 24px 20px;">
-            <h2 style="color: #1e40af; margin: 0 0 8px 0; font-size: 20px; font-weight: 600;">Quote Request Received</h2>
-            <div style="color: #64748b; font-size: 13px; margin-bottom: 20px;">Request #${order_id}</div>
-            
+          <div style="padding: 32px 28px 24px;">
+            <div style="margin-bottom: 24px;">
+              <div style="color: #1e40af; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px;">QUOTE REQUEST</div>
+              <h2 style="color: #1e293b; font-size: 21px; font-weight: 700; margin: 0; line-height: 1.2;">Quote Request Received</h2>
+              <div style="color: #64748b; font-size: 13px; margin-top: 4px;">Request #${order_id}</div>
+            </div>
+
             <p style="font-size: 15px; color: #334155; margin: 0 0 18px 0; line-height: 1.5;">
               Dear ${customer_name},<br><br>
               Thank you for your quote request. We have received it and our team will review it shortly.
             </p>
 
-            <!-- Request Details Box -->
-            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 22px;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <!-- Request Details -->
+            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 20px; margin-bottom: 24px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 14.5px;">
                 <tr>
                   <td style="padding: 5px 0; color: #64748b; width: 130px;">Request ID</td>
                   <td style="padding: 5px 0; color: #1e293b; font-weight: 600;">#${order_id}</td>
@@ -63,19 +66,21 @@ export async function POST(request: NextRequest) {
               </table>
             </div>
 
-            <p style="font-size: 14px; color: #334155; margin: 0 0 6px 0;"><strong>Your Message</strong></p>
-            <div style="background-color: #f1f5f9; padding: 14px; border-radius: 6px; font-size: 14px; line-height: 1.5; color: #334155; border: 1px solid #e2e8f0;">
-              ${message}
+            <div style="margin-bottom: 8px;">
+              <div style="font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px; letter-spacing: 0.5px;">YOUR MESSAGE</div>
+              <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; font-size: 14.5px; line-height: 1.5; color: #334155;">
+                ${message}
+              </div>
             </div>
 
-            <p style="font-size: 15px; color: #334155; margin: 22px 0 0 0;">We will get back to you as soon as possible with a quotation.</p>
+            <p style="font-size: 15px; color: #334155; margin: 20px 0 0 0;">We will get back to you as soon as possible with a quotation.</p>
           </div>
 
           <!-- Footer -->
-          <div style="background-color: #f8fafc; padding: 18px 24px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center;">
+          <div style="background-color: #f1f5f9; padding: 20px 24px; border-top: 1px solid #e2e8f0; font-size: 12.5px; color: #64748b; text-align: center;">
             Best regards,<br>
-            <strong>Educare NG Team</strong> • Delta State, Asaba<br><br>
-            <a href="https://educaremed.com" style="color: #1e40af; text-decoration: none;">www.educaremed.com</a>
+            <strong style="color: #1e40af;">Educare NG Team</strong> • Delta State, Asaba<br><br>
+            <a href="https://educaremed.com" style="color: #1e40af; text-decoration: none; font-weight: 500;">www.educaremed.com</a>
           </div>
 
         </div>
