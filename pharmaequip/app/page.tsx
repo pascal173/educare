@@ -115,10 +115,10 @@ export default function Home() {
           <h3 className="text-4xl font-bold text-center mb-12">Available Sets</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              ['Basic Set', 'â‚¦20,000', 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.'],
-              ['Premium Set', 'â‚¦23,000', 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.'],
-              ['Classic Set', 'â‚¦41,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.'],
-              ['Advanced Set', 'â‚¦55,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.'],
+              ['Basic Set', '\u20A620,000', 'Aneroid sphygmomanometer, stethoscope, thermometer, pulse oximeter, chain breast watch.'],
+              ['Premium Set', '\u20A623,000', 'Digital sphygmomanometer, thermometer, pulse oximeter, chain breast watch.'],
+              ['Classic Set', '\u20A641,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch.'],
+              ['Advanced Set', '\u20A655,000', 'Digital sphygmomanometer, Littmann Classic III stethoscope, thermometer, pulse oximeter, chain breast watch, tourniquet, pen torch, retractable tape, patella hammer.'],
             ].map(([name, price, items]) => (
               <div key={name} className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm">
                 <p className="text-2xl font-bold text-blue-900">{name}</p>
@@ -160,4 +160,5 @@ export default function Home() {
     </div>
   );
 }
+
 
