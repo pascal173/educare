@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { data, error } = await resend.emails.send({
-      from: 'Educare <educaresupplies21@gmail.com>',
+      from: 'Educare <no-reply@educaremed.com>',
       to: [to_email],
       replyTo: 'educaresupplies21@gmail.com'
       subject: `Quote Request Received - Educare NG #${order_id}`,
@@ -62,4 +62,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
 
