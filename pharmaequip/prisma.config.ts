@@ -1,9 +1,8 @@
 ﻿import { defineConfig } from "prisma/config";
-import dotenv from "dotenv";
 
-// Load environment variables from .env.local first, then .env
-dotenv.config({ path: ".env.local" });
-dotenv.config({ path: ".env" }); // fallback
+// This version does not force-load .env files.
+// Vercel injects environment variables automatically at build/runtime.
+// Prisma will read DATABASE_URL directly from process.env.
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
